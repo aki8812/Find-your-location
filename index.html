@@ -44,11 +44,11 @@
             lat = position.coords.latitude;
             lon = position.coords.longitude;
 
-            // 判斷 N/S/E/W
+
             const latDir = lat >= 0 ? 'N' : 'S';
             const lonDir = lon >= 0 ? 'E' : 'W';
 
-            // 顯示小數點格式並加上方向
+
             const latText = `緯度：${Math.abs(lat).toFixed(6)}°${latDir}`;
             const lonText = `經度：${Math.abs(lon).toFixed(6)}°${lonDir}`;
 
@@ -93,3 +93,4 @@
   </script>
 </body>
 </html>
+
