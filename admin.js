@@ -32,11 +32,21 @@ onValue(dataRef, (snapshot) => {
     const div = document.createElement('div');
     div.className = 'entry';
     div.textContent = entry.location;
+
+
     div.onclick = () => {
-      navigator.clipboard.writeText(entry.location).then(() => {
-        alert("已複製這筆位置紀錄！");
-      });
+      const match = entry.location.match(/https:\/\/www\.google\.com\/maps\?q=[^\n\s]+/);
+      const mapLink = match ? match[0] : null;
+
+      if (mapLink) {
+        navigator.clipboard.writeText(mapLink).then(() => {
+          alert("已複製地圖連結！");
+        });
+      } else {
+        alert("找不到地圖連結！");
+      }
     };
+
     logDiv.appendChild(div);
   });
 }, (error) => {
