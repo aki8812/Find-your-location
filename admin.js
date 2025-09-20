@@ -13,13 +13,11 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
-
 const logDiv = document.getElementById('log');
 const dataRef = ref(db, 'locations');
 
 onValue(dataRef, (snapshot) => {
   const data = snapshot.val();
-
   if (!data) {
     logDiv.textContent = '目前尚無位置紀錄。';
     return;
@@ -33,11 +31,9 @@ onValue(dataRef, (snapshot) => {
     div.className = 'entry';
     div.textContent = entry.location;
 
-
     div.onclick = () => {
       const match = entry.location.match(/https:\/\/www\.google\.com\/maps\?q=[^\n\s]+/);
       const mapLink = match ? match[0] : null;
-
       if (mapLink) {
         navigator.clipboard.writeText(mapLink).then(() => {
           alert("已複製地圖連結！");

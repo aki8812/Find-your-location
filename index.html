@@ -1,31 +1,10 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="stylesheet" href="style.css" />
   <meta charset="UTF-8" />
   <title>查詢你的位置(經緯度)</title>
-  <style>
-    body {
-      margin: 0;
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      font-family: Arial, sans-serif;
-      background-color: #f0f0f0;
-    }
-    button {
-      font-size: 18px;
-      padding: 10px 20px;
-      margin: 10px;
-      cursor: pointer;
-    }
-    #output {
-      font-size: 24px;
-      margin-top: 20px;
-      text-align: center;
-    }
-  </style>
 </head>
 <body>
   <button onclick="getLocation()">顯示我的位置</button>
@@ -60,6 +39,7 @@
             const lonDir = lon >= 0 ? 'E' : 'W';
             const latText = `緯度：${Math.abs(lat).toFixed(6)}°${latDir}`;
             const lonText = `經度：${Math.abs(lon).toFixed(6)}°${lonDir}`;
+
             output.innerHTML = `${latText}<br>${lonText}`;
             copyBtn.style.display = 'inline-block';
 
@@ -85,17 +65,18 @@
 
       const latDir = lat >= 0 ? 'N' : 'S';
       const lonDir = lon >= 0 ? 'E' : 'W';
-
       const latDMS = toDMS(lat);
       const lonDMS = toDMS(lon);
 
       const formatted = `${latDMS}${latDir} ${lonDMS}${lonDir}`;
-
-      navigator.clipboard.writeText(formatted).then(() => {
-        alert(`已複製位置：\n${formatted}`);
-      }, () => {
-        alert("複製失敗，請手動選取文字。");
-      });
+      navigator.clipboard.writeText(formatted).then(
+        () => {
+          alert(`已複製位置：\n${formatted}`);
+        },
+        () => {
+          alert("複製失敗，請手動選取文字。");
+        }
+      );
     };
   </script>
 </body>

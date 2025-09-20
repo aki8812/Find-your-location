@@ -23,7 +23,7 @@ export function uploadLocation(lat, lon, userAgent) {
   const mm = String(now.getMinutes()).padStart(2, '0');
   const ss = String(now.getSeconds()).padStart(2, '0');
 
-  const timeFormatted = `[${yyyy}/${MM}/${dd} ${hh}:${mm}:${ss}(UTC+8)]`;
+  const timeFormatted = `${yyyy}/${MM}/${dd} ${hh}:${mm}:${ss}(UTC+8)`;
 
   const toDMS = (deg) => {
     const absolute = Math.abs(deg);
@@ -43,5 +43,7 @@ export function uploadLocation(lat, lon, userAgent) {
   const data = `${timeFormatted}\n位置：${latDMS}${latDir} ${lonDMS}${lonDir}\n裝置：${userAgent}\n地圖：${mapURL}`;
 
   const timestamp = Date.now();
-  set(ref(db, 'locations/' + timestamp), { location: data });
+  set(ref(db, 'locations/' + timestamp), {
+    location: data
+  });
 }
